@@ -50,7 +50,7 @@ const Home: NextPage = () => {
           </p>
         </>
       ) : (
-        <></>
+        <>This is not redirection from vercel</>
       )}
     </div>
   );

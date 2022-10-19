@@ -23,6 +23,6 @@ export default async function handler(
     res.redirect(req.body.next as string);
   }
   else{
-    res.send({message:"hello"})
+    res.send({message:"getting it?"})
   }
 }
