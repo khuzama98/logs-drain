@@ -1,4 +1,4 @@
-import prisma from "./prisma";
+import qs from "querystring";
 
 const config = {
   clientId: process.env.NEXT_PUBLIC_CLIENT_ID,
@@ -9,13 +9,13 @@ const config = {
 const getToken = async (code: any) => {
   try {
     const URL = "https://api.vercel.com/v2/oauth/access_token";
-    console.log("config",config)
+
     const res = await fetch(URL, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: JSON.stringify({
+      body: qs.stringify({
         client_id: config.clientId,
         client_secret: config.clientSecret,
         code,
@@ -24,34 +24,28 @@ const getToken = async (code: any) => {
     });
 
     const json = await res.json();
-    console.log("access token",json.access_token)
+
     return json.access_token;
   } catch (e) {
     console.log("error while fetching token", e);
   }
 };
 
-
 const createLogDrain = async (token: any, body: any) => {
-    try {
-        const URL = "https://api.vercel.com/v1/integrations/log-drains";
+  try {
+    const URL = "https://api.vercel.com/v1/integrations/log-drains";
 
-        const res = await fetch(URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify(body)
-        })
-        console.log("res,",res)
-        console.log("res json",res.json())
-    } catch(e) {
-        console.log("error while creating drain logs",e)
-    }
-}
+    await fetch(URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
+    });
+  } catch (e) {
+    console.log("error while creating drain logs", e);
+  }
+};
 
-export {
-    getToken,
-    createLogDrain
-}
+export { getToken, createLogDrain };

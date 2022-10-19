@@ -1,5 +1,4 @@
 export const baseUrl = "/";
-// export const baseUrl = "http://localhost:3001";
 
 export default class Services {
   static Get = async (route: string) => {
@@ -23,7 +22,7 @@ export default class Services {
       });
       const response = await res.json();
       return response;
-    } catch (e:any) {
+    } catch (e: any) {
       console.log(`Error in ${route} -->`, e);
       throw e.message;
     }

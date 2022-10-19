@@ -13,12 +13,16 @@ const Home: NextPage = () => {
   };
 
   const onSubmit = async () => {
-    const res = await Services.Post("api/callback", {
-      ...data,
-      code: router.query.code,
-      next: router.query.next,
-    });
-    console.log(res);
+    try {
+      const res = await Services.Post("api/callback", {
+        ...data,
+        code: router.query.code,
+        next: router.query.next,
+      });
+      window.location.href = router.query.next as string;
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
