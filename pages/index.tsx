@@ -7,11 +7,11 @@ const Home: NextPage = () => {
   const [isVercel, setVercel] = useState(true);
   const [data, setData] = useState({ type: "json", url: "" });
   const router = useRouter();
-
+  
   const onChange = (e: any) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
-
+  
   const onSubmit = async () => {
     try {
       const res = await Services.Post("api/callback", {
@@ -24,7 +24,7 @@ const Home: NextPage = () => {
       console.log(e);
     }
   };
-
+  
   useEffect(() => {
     if (!router.query.code || !router.query.next) {
       setVercel(false);

@@ -10,8 +10,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Logs {
+model Drain {
   id String @id @default(auto()) @map("_id") @db.ObjectId
-  value String
-  createdAt DateTime @default(now())
+  host String @unique
+  source String
+  logs Log[]
+}
+
+model Log {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  message String
+  drainId String @db.ObjectId
+  drain Drain @relation(fields: [drainId], references: [id])
+  timestamp DateTime // timestamp received from vercel
+  createdAt DateTime @default(now()) // mongo generated timestamp generated at the time of entry to DB.
 }
