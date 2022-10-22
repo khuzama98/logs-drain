@@ -12,7 +12,7 @@ datasource db {
 
 model Drain {
   id String @id @default(auto()) @map("_id") @db.ObjectId
-  host String @unique
+  host String
   source String
   logs Log[]
 }
