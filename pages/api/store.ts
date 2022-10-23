@@ -8,22 +8,23 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      console.log("body -->",req.body)
+      console.log("body -->",req.body[0])
+      const {host, source, timestamp, message} = req.body[0]
       let drain;
-      const isDrainAvailable = await findDrain(req.body.host, req.body.source);
+      const isDrainAvailable = await findDrain(host, source);
 
       if (!isDrainAvailable) {
         drain = await createDrain({
-          host: req.body.host,
-          source: req.body.source,
+          host: host,
+          source: source,
         });
       } else {
         drain = isDrainAvailable;
       }
 
       const logStorageResponse = await storeLog({
-        message: req.body.message,
-        timestamp: new Date(req.body.timestamp),
+        message: message,
+        timestamp: new Date(timestamp),
         drainId: drain.id,
       });
 
