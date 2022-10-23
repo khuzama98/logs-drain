@@ -1,4 +1,10 @@
-import prisma from "../prisma/prisma";
+import PrismaDriver from "../prisma/prisma";
+import { PrismaClient } from "@prisma/client";
+
+let prisma:PrismaClient;
+(async ()=>{
+  prisma = await PrismaDriver()
+})
 
 interface ILog {
   message: string;
@@ -11,10 +17,6 @@ interface IDrain {
   source: string;
 }
 
-enum Source {
-  build,
-  client
-}
 
 const storeLog = async (body: ILog) => {
   try {
