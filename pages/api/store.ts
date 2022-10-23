@@ -8,6 +8,7 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
+      console.log("body -->",req.body)
       let drain;
       const isDrainAvailable = await findDrain(req.body.host, req.body.source);
 
