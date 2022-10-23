@@ -11,30 +11,30 @@ export default async function handler(
     const { authorization } = req.headers;
 
     if (authorization === `Bearer ${process.env.API_SECRET_KEY}`) {
-      // setTimeout(async () => {
-      const pendingDeleteArray = [];
-      const timestamp = Date.now();
-      const filteredDrain = await findAllDrains();
+      setTimeout(async () => {
+        const pendingDeleteArray = [];
+        const timestamp = Date.now();
+        const filteredDrain = await findAllDrains();
 
-      console.log("filtered drain", filteredDrain);
+        console.log("filtered drain", filteredDrain);
 
-      for (const drain of filteredDrain) {
-        const filteredLog = await findLogs(drain.id, timestamp);
-        console.log("filtered logs", filteredLog);
-        if (filteredLog.length) {
-          const storedObjectResponse = await storeObject({
-            source: drain.source,
-            batchedLogs: filteredLog,
-            timestamp,
-          });
-          for (const log of filteredLog) {
-            pendingDeleteArray.push(deleteLog(log.id));
+        for (const drain of filteredDrain) {
+          const filteredLog = await findLogs(drain.id, timestamp);
+          console.log("filtered logs", filteredLog);
+          if (filteredLog.length) {
+            const storedObjectResponse = await storeObject({
+              source: drain.source,
+              batchedLogs: filteredLog,
+              timestamp,
+            });
+            for (const log of filteredLog) {
+              pendingDeleteArray.push(deleteLog(log.id));
+            }
+            const deletedLogs = await Promise.all(pendingDeleteArray);
+            console.log("deleted", deletedLogs);
           }
-          const deletedLogs = await Promise.all(pendingDeleteArray);
-          console.log("deleted", deletedLogs);
         }
-      }
-      // }, 60 * 1000);
+      }, 60 * 1000);
 
       res.send({
         data: [],

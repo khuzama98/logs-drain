@@ -1,6 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import formatISO from 'date-fns/formatISO'
 import { createDrain, findDrain, storeLog } from "../../actions/logStorage";
 
 export default async function handler(
@@ -12,19 +11,19 @@ export default async function handler(
       let drain;
       const isDrainAvailable = await findDrain(req.body.host, req.body.source);
 
-      if(!isDrainAvailable) {
+      if (!isDrainAvailable) {
         drain = await createDrain({
           host: req.body.host,
-          source: req.body.source
-        })
+          source: req.body.source,
+        });
       } else {
-        drain = isDrainAvailable
+        drain = isDrainAvailable;
       }
 
       const logStorageResponse = await storeLog({
         message: req.body.message,
         timestamp: new Date(req.body.timestamp),
-        drainId: drain.id
+        drainId: drain.id,
       });
 
       res.send({
@@ -32,7 +31,6 @@ export default async function handler(
         code: 200,
         message: "Log Successfully Saved!",
       });
-      
     } catch (e) {
       res.send({ data: [], code: 400, message: e });
     }

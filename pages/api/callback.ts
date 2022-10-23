@@ -11,9 +11,9 @@ export default async function handler(
       if (!req.body.type || !req.body.url) {
         return res.send({ message: "Error: provide type and url", code: 400 });
       }
-      
+
       const token = await getToken(req.body.code);
-      
+
       await createLogDrain(token, {
         name: "custom-logs-drain",
         type: req.body.type,

@@ -11,10 +11,6 @@ interface IDrain {
   source: string;
 }
 
-enum Source {
-  build,
-  client
-}
 
 const storeLog = async (body: ILog) => {
   try {
