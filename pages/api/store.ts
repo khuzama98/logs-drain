@@ -6,10 +6,18 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
+  
   if (req.method === "POST") {
     try {
-      console.log("body -->",req.body[0])
-      const {host, source, timestamp, message} = req.body[0]
+      console.log("body -->", JSON.parse(JSON.stringify(req.body)));
+
+      req.body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+
+      const { host, source, timestamp, message } = req.body.length
+        ? req.body[0] // cause vercel is sending logs in array
+        : req.body; // beacon will send data in body
+
+      
       let drain;
       const isDrainAvailable = await findDrain(host, source);
 
@@ -34,6 +42,7 @@ export default async function handler(
         message: "Log Successfully Saved!",
       });
     } catch (e) {
+      console.log(e);
       res.send({ data: [], code: 400, message: e });
     }
   } else {
